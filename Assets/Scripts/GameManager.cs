@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         powerUpReset = true;
     }
 
-    /*public IEnumerator RestartGameCo()
+    public IEnumerator RestartGameCo()
     {
         theScoreManager.scoreIncreasing = false;
         thePlayer.gameObject.SetActive(false);
@@ -81,6 +81,6 @@ public class GameManager : MonoBehaviour
 
         theScoreManager.scoreCount = 0;
         theScoreManager.scoreIncreasing = true;
-    }*/
+    }
 
 }
