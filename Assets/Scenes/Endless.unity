@@ -2306,7 +2306,7 @@ MonoBehaviour:
   moveSpeed: 6
   speedMultiplier: 1.05
   speedUpDistance: 100
-  jumpForce: 12
+  jumpForce: 10
   grounded: 0
   WhatIsGround:
     serializedVersion: 2

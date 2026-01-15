@@ -10,6 +10,7 @@ public class PickupPoints : MonoBehaviour
     private ScoreManager theScoreManager;
 
     private AudioSource coinSound;
+    public GameObject floatingTextPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,14 @@ public class PickupPoints : MonoBehaviour
             
             // Tắt đồng xu đi (hoặc Destroy(gameObject))
             gameObject.SetActive(false); 
+            
+            if(floatingTextPrefab != null)
+            {
+                // Tạo ra text tại vị trí của đồng tiền
+                GameObject textObj = Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
+                // Set giá trị và màu sắc
+                textObj.GetComponent<FloatingText>().SetValue(scoreToGive);
+            }
 
             if(coinSound.isPlaying)
             {

@@ -2,10 +2,12 @@ using UnityEngine;
 
 public class MoneyTrap : MonoBehaviour
 {
-    public int penaltyAmount = 50; // Số điểm bị trừ (bạn chỉnh số này trong Unity)
+    public int penaltyAmount; // Số điểm bị trừ (bạn chỉnh số này trong Unity)
 
     private ScoreManager theScoreManager;
     private AudioSource coinSound;
+
+    public GameObject floatingTextPrefab;
 
     void Start()
     {
@@ -23,6 +25,16 @@ public class MoneyTrap : MonoBehaviour
             {
                 // MẸO: Gọi hàm AddScore nhưng truyền số ÂM để trừ điểm
                 theScoreManager.AddScore(-penaltyAmount); 
+
+                if(floatingTextPrefab != null)
+                {
+                    // Tạo text ngay trên đầu nhân vật (other.transform.position)
+                    Vector3 popPos = new Vector3(other.transform.position.x, other.transform.position.y + 1f, 0);
+                    GameObject textObj = Instantiate(floatingTextPrefab, popPos, Quaternion.identity);
+                    
+                    // Truyền số ÂM để nó hiện màu đỏ
+                    textObj.GetComponent<FloatingText>().SetValue(-penaltyAmount);
+                }
                 
                 // (Tùy chọn) In ra log để kiểm tra
                 Debug.Log("Đã dẫm phải bẫy! Bị trừ " + penaltyAmount + " điểm.");

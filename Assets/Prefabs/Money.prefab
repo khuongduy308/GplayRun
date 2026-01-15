@@ -145,6 +145,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreToGive: 100
+  floatingTextPrefab: {fileID: 3405230886364165000, guid: cd5ceee49e6afb44a874e435e8574d30,
+    type: 3}
 --- !u!114 &33739706652665258
 MonoBehaviour:
   m_ObjectHideFlags: 0
