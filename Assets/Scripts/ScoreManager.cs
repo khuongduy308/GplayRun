@@ -50,6 +50,11 @@ public class ScoreManager : MonoBehaviour
             pointsToAdd = pointsToAdd * 2;
         }
         scoreCount += pointsToAdd;
+
+        if (scoreCount < 0)
+        {
+            scoreCount = 0;
+        }
     }
 
     public void ReduceScore(int amount)

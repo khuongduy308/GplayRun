@@ -13,7 +13,6 @@ public class PlatformGenerator : MonoBehaviour
     public float distanceBetweenMin;
     public float distanceBetweenMax;
 
-    //public GameObject[] thePlatforms;
     private int PlatformSelector;
     private float[] platformWidths;
 
@@ -28,19 +27,19 @@ public class PlatformGenerator : MonoBehaviour
     public StarGenerator theStarGenerator;
     public float randomStarThreshold;
 
+    // --- PHẦN GAI NHỌN (CŨ) ---
     public float randomSpikeThreshold;
     public ObjectPooler spikePool;
 
+    // --- [MỚI] PHẦN BẪY TRỪ TIỀN ---
+    public float randomMoneyTrapThreshold; // Tỉ lệ xuất hiện bẫy (0-100)
+    public ObjectPooler moneyTrapPool;     // Bể chứa bẫy
+    // -------------------------------
+
     public float powerUpHeight;
-    // public ObjectPooler powerUpPool;
-    // public float powerUpThreshold;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        //platformWidth = thePlatform.GetComponent<BoxCollider2D>().size.x;
-
         platformWidths = new float[objPools.Length];
 
         for (int i = 0; i < objPools.Length; i++)
@@ -54,7 +53,6 @@ public class PlatformGenerator : MonoBehaviour
         theStarGenerator = FindObjectOfType<StarGenerator>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (transform.position.x < generationPoint.position.x)
@@ -68,55 +66,51 @@ public class PlatformGenerator : MonoBehaviour
             if (heightChange > maxHeight)
             {
                 heightChange = maxHeight;
-            } 
+            }
             else if (heightChange < minHeight)
             {
                 heightChange = minHeight;
             }
 
-            // if(Random.Range(0f, 100f) < powerUpThreshold)
-            // {
-            //     GameObject newPowerUp = powerUpPool.getPooledObject();
-
-            //     newPowerUp.transform.position = transform.position + new Vector3(distanceBetween / 2f, Random.Range(powerUpHeight / 2, powerUpHeight), 0f);
-
-            //     newPowerUp.SetActive(true);
-            // }
-
-
             transform.position = new Vector3(transform.position.x + (platformWidths[PlatformSelector] / 2) + distanceBetween, heightChange, transform.position.z);
 
-            //Instantiate(/*thePlatform*/ thePlatforms[PlatformSelector], transform.position, transform.rotation);
-
-
-            GameObject newPlatform = objPools[PlatformSelector].getPooledObject(); //Using getPooledObject Function created in ObjectPooler.cs to get an inactive Pooled Object 
-
+            // Sinh ra Platform từ Pool
+            GameObject newPlatform = objPools[PlatformSelector].getPooledObject();
             newPlatform.transform.position = transform.position;
             newPlatform.transform.rotation = transform.rotation;
             newPlatform.SetActive(true);
 
-            if(Random.Range(0f, 100f) < randomStarThreshold)
+            // 1. Sinh Sao
+            if (Random.Range(0f, 100f) < randomStarThreshold)
             {
                 theStarGenerator.spawnStars(new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z));
             }
-            
-            if(Random.Range(0f, 100f) < randomSpikeThreshold)
+            else if (Random.Range(0f, 100f) < randomSpikeThreshold)
             {
-
                 float spikePositionX = Random.Range(-platformWidths[PlatformSelector] / 2 + 1f, platformWidths[PlatformSelector] / 2 - 1f);
-
                 Vector3 spikePosition = new Vector3(spikePositionX, 0.5f, 0f);
+                
                 GameObject newSpike = spikePool.getPooledObject();
                 newSpike.transform.position = transform.position + spikePosition;
                 newSpike.transform.rotation = transform.rotation;
                 newSpike.SetActive(true);
-
             }
+            else if (Random.Range(0f, 100f) < randomMoneyTrapThreshold)
+            {
+                // Tính toán vị trí ngẫu nhiên trên mặt đất (giống hệt Gai)
+                float trapX = Random.Range(-platformWidths[PlatformSelector] / 2 + 1f, platformWidths[PlatformSelector] / 2 - 1f);
+                
+                // Chỉnh độ cao Y (0.5f) cho phù hợp với Sprite của bẫy, bạn có thể sửa số này nếu bẫy bị chìm hoặc bay lơ lửng
+                Vector3 trapPosition = new Vector3(trapX, 0.5f, 0f); 
 
-
+                GameObject newTrap = moneyTrapPool.getPooledObject();
+                newTrap.transform.position = transform.position + trapPosition;
+                newTrap.transform.rotation = transform.rotation;
+                newTrap.SetActive(true);
+            }
+            // -----------------------------------------------
 
             transform.position = new Vector3(transform.position.x + (platformWidths[PlatformSelector] / 2), transform.position.y, transform.position.z);
-
         }
     }
 }
